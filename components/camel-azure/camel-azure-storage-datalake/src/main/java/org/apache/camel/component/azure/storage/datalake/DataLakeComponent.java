@@ -104,7 +104,7 @@ public class DataLakeComponent extends DefaultComponent {
 
     private void validateConfiguration(final DataLakeConfiguration config) {
         if (config.getServiceClient() == null && config.getClientSecretCredential() == null
-                && config.getSharedKeyCredential() == null) {
+                && config.getSharedKeyCredential() == null && config.getSasTokenCredential() == null) {
             throw new IllegalArgumentException("client or credentials must be specified");
         }
     }

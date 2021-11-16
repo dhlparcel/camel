@@ -18,6 +18,7 @@ package org.apache.camel.component.azure.storage.datalake.client;
 
 import java.util.Locale;
 
+import com.azure.core.credential.AzureSasCredential;
 import com.azure.identity.ClientSecretCredential;
 import com.azure.identity.ClientSecretCredentialBuilder;
 import com.azure.storage.common.StorageSharedKeyCredential;
@@ -40,12 +41,23 @@ public final class DataLakeClientFactory {
         final DataLakeServiceClient client;
         if (configuration.getServiceClient() != null) {
             client = configuration.getServiceClient();
+        } else if (configuration.getSasTokenCredential() != null) {
+            client = createDataLakeServiceClientWithSasToken(configuration);
         } else if (configuration.getAccountKey() != null || configuration.getSharedKeyCredential() != null) {
             client = createDataLakeServiceClientWithSharedKey(configuration);
         } else {
             client = createDataLakeServiceClientWithClientSecret(configuration);
         }
         return client;
+    }
+
+    private static DataLakeServiceClient createDataLakeServiceClientWithSasToken(final DataLakeConfiguration configuration) {
+        AzureSasCredential sasTokenCredential = new AzureSasCredential(configuration.getSasTokenCredential());
+
+        return new DataLakeServiceClientBuilder()
+                .credential(sasTokenCredential)
+                .endpoint(buildAzureUri(configuration))
+                .buildClient();
     }
 
     private static DataLakeServiceClient createDataLakeServiceClientWithSharedKey(final DataLakeConfiguration configuration) {

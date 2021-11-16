@@ -38,6 +38,8 @@ public class DataLakeConfiguration implements Cloneable {
     private String fileSystemName;
     @UriParam(description = "shared key credential for azure datalake gen2")
     private StorageSharedKeyCredential sharedKeyCredential;
+    @UriParam(description = "sas token credential for azure datalake gen2")
+    private String sasTokenCredential;
     @UriParam(description = "directory of the file to be handled in component")
     private String directoryName;
     @UriParam(description = "name of file to be handled in component")
@@ -272,6 +274,14 @@ public class DataLakeConfiguration implements Cloneable {
 
     public void setSharedKeyCredential(StorageSharedKeyCredential sharedKeyCredential) {
         this.sharedKeyCredential = sharedKeyCredential;
+    }
+
+    public String getSasTokenCredential() {
+        return sasTokenCredential;
+    }
+
+    public void setSasTokenCredential(String sasTokenCredential) {
+        this.sasTokenCredential = sasTokenCredential;
     }
 
     public String getDirectoryName() {
